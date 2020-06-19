@@ -24,8 +24,7 @@ public class Main {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        SqlSessionFactory sqlSessionFactory = null;
-        sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         SqlSession sqlSession = null;
         try {
             sqlSession = sqlSessionFactory.openSession();
