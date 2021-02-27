@@ -53,7 +53,7 @@ public class DefaultSqlSession implements SqlSession {
    */
   private boolean autoCommit;
   private boolean dirty;
-  
+
   public DefaultSqlSession(Configuration configuration, Executor executor, boolean autoCommit) {
     this.configuration = configuration;
     this.executor = executor;
@@ -74,9 +74,9 @@ public class DefaultSqlSession implements SqlSession {
   @Override
   public <T> T selectOne(String statement, Object parameter) {
     // Popular vote was to return null on 0 results and throw exception on too many.
-    //转而去调用selectList,很简单的，如果得到0条则返回null，得到1条则返回1条，得到多条报TooManyResultsException错
+    // 转而去调用selectList,很简单的，如果得到0条则返回null，得到1条则返回1条，得到多条报TooManyResultsException错
     // 特别需要主要的是当没有查询到结果的时候就会返回null。因此一般建议在mapper中编写resultType的时候使用包装类型
-    //而不是基本类型，比如推荐使用Integer而不是int。这样就可以避免NPE
+    // 而不是基本类型，比如推荐使用Integer而不是int。这样就可以避免NPE
     List<T> list = this.<T>selectList(statement, parameter);
     if (list.size() == 1) {
       return list.get(0);
@@ -313,7 +313,7 @@ public class DefaultSqlSession implements SqlSession {
         //参数若是List型，做list标记
         map.put("list", object);
       }
-      return map;      
+      return map;
     } else if (object != null && object.getClass().isArray()) {
       //参数若是数组型，，做array标记
       StrictMap<Object> map = new StrictMap<Object>();
