@@ -24,10 +24,12 @@ public class Main {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        // 默认创建DefaultSqlSessionFactory C.H_20210228
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         SqlSession sqlSession = null;
         try {
             sqlSession = sqlSessionFactory.openSession();
+            // 创建RoleDao代理,默认用JDK代理创建 C.H_20210228
             RoleDao roleMapper = sqlSession.getMapper(RoleDao.class);
             Role role = roleMapper.getRole(1L);
             System.out.println(role.getId() + ":" + role.getRoleName() + ":" + role.getNote());
