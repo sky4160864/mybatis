@@ -6,10 +6,14 @@
     <settings>
         <setting name="lazyLoadingEnabled" value="true"/>
         <!-- <setting name="aggressiveLazyLoading" value="false"/> -->
+
+       <!--日志配置-->
+        <!--不打印日志-->
+        <!--<setting name="logImpl" value="NO_LOGGING"/>-->
+        <!--使用LOG4J-->
+        <setting name="logImpl" value="LOG4J"/>
     </settings>
-    <typeAliases>
-        <typeAlias alias="role" type="com.cap.entity.Role"/>
-    </typeAliases>
+
     <typeHandlers>
         <typeHandler jdbcType="VARCHAR" javaType="string" handler="com.cap.handle.MyStringHandler"/>
     </typeHandlers>

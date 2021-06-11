@@ -20,8 +20,11 @@
 
 <configuration>
 
-    <settings>
-    	<setting name="logImpl" value="NO_LOGGING"/>
-    </settings>
 
+    <settings>
+        <!--不打印日志-->
+    	<!--<setting name="logImpl" value="NO_LOGGING"/>-->
+        <!--使用LOG4J-->
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
 </configuration>
