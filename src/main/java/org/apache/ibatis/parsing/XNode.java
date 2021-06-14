@@ -96,6 +96,7 @@ public class XNode {
   public String getValueBasedIdentifier() {
     StringBuilder builder = new StringBuilder();
     XNode current = this;
+    /* 向上级递归 C.H 2021-06-12 */
     while (current != null) {
       if (current != this) {
         builder.insert(0, "_");
@@ -106,6 +107,7 @@ public class XNode {
               current.getStringAttribute("property", null)));
       if (value != null) {
         value = value.replace('.', '_');
+        /* C.H 2021-06-12 insert原因是当前节点value为空时,会去找父节点 */
         builder.insert(0, "]");
         builder.insert(0,
             value);

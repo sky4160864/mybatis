@@ -43,6 +43,9 @@ public class PropertyParser {
       this.variables = variables;
     }
 
+    /* mybatis3.4可以设置默认值${db.username:postgres}  如果开启默认值后,没有对应值,就会还回默认值
+     * C.H 2021-06-12
+     */
     @Override
     public String handleToken(String content) {
       if (variables != null && variables.containsKey(content)) {

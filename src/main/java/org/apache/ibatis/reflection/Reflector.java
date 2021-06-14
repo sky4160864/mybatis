@@ -71,6 +71,7 @@ public class Reflector {
   //构造函数
   private Constructor<?> defaultConstructor;
 
+  /* 记录了所有属性名称的集合 C.H 2021-06-12 */
   private Map<String, String> caseInsensitivePropertyMap = new HashMap<String, String>();
 
   private Reflector(Class<?> clazz) {
@@ -87,6 +88,7 @@ public class Reflector {
     writeablePropertyNames = setMethods.keySet().toArray(new String[setMethods.keySet().size()]);
     for (String propName : readablePropertyNames) {
         //这里为了能找到某一个属性，就把他变成大写作为map的key。。。
+      /* TODO 如果方法getMyName getMyname 不是错误了? C.H 2021-06-12 */
       caseInsensitivePropertyMap.put(propName.toUpperCase(Locale.ENGLISH), propName);
     }
     for (String propName : writeablePropertyNames) {
@@ -113,6 +115,7 @@ public class Reflector {
   }
 
   private void addGetMethods(Class<?> cls) {
+    /* key:属性名 value是List 因为会有重写 C.H 2021-06-12 */
     Map<String, List<Method>> conflictingGetters = new HashMap<String, List<Method>>();
     //这里getter和setter都调用了getClassMethods，有点浪费效率了。不妨把addGetMethods,addSetMethods合并成一个方法叫addMethods
     Method[] methods = getClassMethods(cls);
@@ -133,30 +136,40 @@ public class Reflector {
     resolveGetterConflicts(conflictingGetters);
   }
 
+  /* TODO
+    为了解决重写问题
+    A类方法 返回List<String>,子类ASub方法 返回ArrayList<String> 是可以的
+    应该用 子类型
+  C.H 2021-06-12 */
   private void resolveGetterConflicts(Map<String, List<Method>> conflictingGetters) {
     for (String propName : conflictingGetters.keySet()) {
       List<Method> getters = conflictingGetters.get(propName);
       Iterator<Method> iterator = getters.iterator();
       Method firstMethod = iterator.next();
       if (getters.size() == 1) {
+        // 同一签名只有一个get方法,直接加入 C.H
         addGetMethod(propName, firstMethod);
       } else {
+        // 同一签名有多个get方法 C.H
         Method getter = firstMethod;
         Class<?> getterType = firstMethod.getReturnType();
         while (iterator.hasNext()) {
           Method method = iterator.next();
           Class<?> methodType = method.getReturnType();
           if (methodType.equals(getterType)) {
-            throw new ReflectionException("Illegal overloaded getter method with ambiguous type for property " 
+            // getters.size() == 1 已经过滤,不可能出现 C.H
+            throw new ReflectionException("Illegal overloaded getter method with ambiguous type for property "
                 + propName + " in class " + firstMethod.getDeclaringClass()
                 + ".  This breaks the JavaBeans " + "specification and can cause unpredicatble results.");
           } else if (methodType.isAssignableFrom(getterType)) {
+            // 父类.class.isAssignableFrom(子类.class) 即methodType是父类,那么子类getterType更适合,什么也不做 C.H
             // OK getter type is descendant
           } else if (getterType.isAssignableFrom(methodType)) {
+            // 即getterType是父类,那么子类methodType更适合,用methodType替换掉 C.H
             getter = method;
             getterType = methodType;
           } else {
-            throw new ReflectionException("Illegal overloaded getter method with ambiguous type for property " 
+            throw new ReflectionException("Illegal overloaded getter method with ambiguous type for property "
                 + propName + " in class " + firstMethod.getDeclaringClass()
                 + ".  This breaks the JavaBeans " + "specification and can cause unpredicatble results.");
           }
@@ -302,7 +315,7 @@ public class Reflector {
     while (currentClass != null) {
       addUniqueMethods(uniqueMethods, currentClass.getDeclaredMethods());
 
-      // we also need to look for interface methods - 
+      // we also need to look for interface methods -
       // because the class may be abstract
       Class<?>[] interfaces = currentClass.getInterfaces();
       for (Class<?> anInterface : interfaces) {
@@ -321,6 +334,7 @@ public class Reflector {
     for (Method currentMethod : methods) {
       if (!currentMethod.isBridge()) {
           //取得签名
+        /* returnTypeName#methodName:paramName1,paramName2,... C.H 2021-06-12 */
         String signature = getSignature(currentMethod);
         // check to see if the method is already known
         // if it is known, then an extended class must have

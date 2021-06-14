@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
  */
 /**
  * 方法调用者
- * 
+ *
  */
 public class MethodInvoker implements Invoker {
 
@@ -37,6 +37,7 @@ public class MethodInvoker implements Invoker {
     if (method.getParameterTypes().length == 1) {
       type = method.getParameterTypes()[0];
     } else {
+      /* TODO 不知道作用 C.H 2021-06-12 */
       type = method.getReturnType();
     }
   }
