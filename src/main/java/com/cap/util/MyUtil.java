@@ -20,6 +20,7 @@ public class MyUtil {
     public static final SqlSessionFactory SQL_SESSION_FACTORY = build();
 
     private static SqlSessionFactory build() {
+        log.debug("=========init SqlSessionFactory===========");
         try {
             return new SqlSessionFactoryBuilder().build(Resources.getResourceAsStream("mybatis-config.xml"));
         } catch (IOException e) {

@@ -31,7 +31,8 @@ import org.apache.ibatis.cache.Cache;
  * @author Clinton Begin
  */
 public class SoftCache implements Cache {
-  //链表用来引用元素，防垃圾回收
+  // 链表用来引用元素，防垃圾回收
+  // 最近使用的一部分缓存项不会被GC回收，这就是通过将其value添加到
   private final Deque<Object> hardLinksToAvoidGarbageCollection;
   //被垃圾回收的引用队列
   private final ReferenceQueue<Object> queueOfGarbageCollectedEntries;
@@ -80,7 +81,7 @@ public class SoftCache implements Cache {
       if (result == null) {
         delegate.removeObject(key);
       } else {
-        // See #586 (and #335) modifications need more than a read lock 
+        // See #586 (and #335) modifications need more than a read lock
         synchronized (hardLinksToAvoidGarbageCollection) {
             //存入经常访问的键值到链表(最多256元素),防止垃圾回收
           hardLinksToAvoidGarbageCollection.addFirst(result);

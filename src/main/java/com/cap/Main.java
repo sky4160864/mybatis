@@ -3,6 +3,7 @@ package com.cap;
 import com.cap.dao.RoleDao;
 import com.cap.entity.Role;
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -28,6 +29,7 @@ public class Main {
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         SqlSession sqlSession = null;
         try {
+            Configuration configuration = sqlSessionFactory.getConfiguration();
             sqlSession = sqlSessionFactory.openSession();
             // 创建RoleDao代理,默认用JDK代理创建 C.H_20210228
             RoleDao roleMapper = sqlSession.getMapper(RoleDao.class);

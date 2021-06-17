@@ -232,7 +232,9 @@ public class MapperMethod {
     private final boolean returnsVoid;
     private final Class<?> returnType;
     private final String mapKey;
+    // 用来标记该方法参数列表中ResultHandler类型参数的位置
     private final Integer resultHandlerIndex;
+    // 用来标记该方法参数列表中RowBounds类型参数的位置
     private final Integer rowBoundsIndex;
     private final SortedMap<Integer, String> params;
     private final boolean hasNamedParameters;

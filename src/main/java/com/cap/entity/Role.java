@@ -3,6 +3,8 @@ package com.cap.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * (Role)实体类
  *
@@ -16,5 +18,5 @@ public class Role {
     private long id;
     private String roleName;
     private String note;
-
+    private List<User> users;
 }

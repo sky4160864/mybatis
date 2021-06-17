@@ -104,26 +104,26 @@ public class XMLConfigBuilder extends BaseBuilder {
       throw new BuilderException("Each XMLConfigBuilder can only be used once.");
     }
     parsed = true;
-//  <?xml version="1.0" encoding="UTF-8" ?> 
-//  <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
-//  "http://mybatis.org/dtd/mybatis-3-config.dtd"> 
-//  <configuration> 
-//  <environments default="development"> 
-//  <environment id="development"> 
-//  <transactionManager type="JDBC"/> 
-//  <dataSource type="POOLED"> 
-//  <property name="driver" value="${driver}"/> 
-//  <property name="url" value="${url}"/> 
-//  <property name="username" value="${username}"/> 
-//  <property name="password" value="${password}"/> 
-//  </dataSource> 
-//  </environment> 
+//  <?xml version="1.0" encoding="UTF-8" ?>
+//  <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+//  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+//  <configuration>
+//  <environments default="development">
+//  <environment id="development">
+//  <transactionManager type="JDBC"/>
+//  <dataSource type="POOLED">
+//  <property name="driver" value="${driver}"/>
+//  <property name="url" value="${url}"/>
+//  <property name="username" value="${username}"/>
+//  <property name="password" value="${password}"/>
+//  </dataSource>
+//  </environment>
 //  </environments>
-//  <mappers> 
-//  <mapper resource="org/mybatis/example/BlogMapper.xml"/> 
-//  </mappers> 
+//  <mappers>
+//  <mapper resource="org/mybatis/example/BlogMapper.xml"/>
+//  </mappers>
 //  </configuration>
-    
+
     //根节点是configuration
     parseConfiguration(parser.evalNode("/configuration"));
     return configuration;
@@ -169,10 +169,10 @@ public class XMLConfigBuilder extends BaseBuilder {
 //  <typeAlias alias="Section" type="domain.blog.Section"/>
 //  <typeAlias alias="Tag" type="domain.blog.Tag"/>
 //</typeAliases>
-//or    
+//or
 //<typeAliases>
 //  <package name="domain.blog"/>
-//</typeAliases>  
+//</typeAliases>
   private void typeAliasesElement(XNode parent) {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
@@ -209,7 +209,7 @@ public class XMLConfigBuilder extends BaseBuilder {
 //  <plugin interceptor="org.mybatis.example.ExamplePlugin">
 //    <property name="someProperty" value="100"/>
 //  </plugin>
-//</plugins>  
+//</plugins>
   private void pluginElement(XNode parent) throws Exception {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
@@ -256,7 +256,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       //如果在这些地方,属性多于一个的话,MyBatis 按照如下的顺序加载它们:
 
       //1.在 properties 元素体内指定的属性首先被读取。
-      //2.从类路径下资源或 properties 元素的 url 属性中加载的属性第二被读取,它会覆盖已经存在的完全一样的属性。
+      //2.在读取properties属性resource或者url,它会覆盖已经存在的完全一样的属性。
       //3.作为方法参数传递的属性最后被读取, 它也会覆盖任一已经存在的完全一样的属性,这些属性可能是从 properties 元素体内和资源/url 属性中加载的。
       //传入方式是调用构造函数时传入，public XMLConfigBuilder(Reader reader, String environment, Properties props)
 
@@ -269,6 +269,7 @@ public class XMLConfigBuilder extends BaseBuilder {
         throw new BuilderException("The properties element cannot specify both a URL and a resource based property file reference.  Please specify one or the other.");
       }
       if (resource != null) {
+        Properties p = Resources.getResourceAsProperties(resource);
         defaults.putAll(Resources.getResourceAsProperties(resource));
       } else if (url != null) {
         defaults.putAll(Resources.getUrlAsProperties(url));
@@ -311,7 +312,7 @@ public class XMLConfigBuilder extends BaseBuilder {
           throw new BuilderException("The setting " + key + " is not known.  Make sure you spelled it correctly (case sensitive).");
         }
       }
-      
+
       //下面非常简单，一个个设置属性
       //如何自动映射列到字段/ 属性
       configuration.setAutoMappingBehavior(AutoMappingBehavior.valueOf(props.getProperty("autoMappingBehavior", "PARTIAL")));
@@ -348,7 +349,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       configuration.setSafeResultHandlerEnabled(booleanValueOf(props.getProperty("safeResultHandlerEnabled"), true));
       //动态SQL生成语言所使用的脚本语言
       configuration.setDefaultScriptingLanguage(resolveClass(props.getProperty("defaultScriptingLanguage")));
-      //当结果集中含有Null值时是否执行映射对象的setter或者Map对象的put方法。此设置对于原始类型如int,boolean等无效。 
+      //当结果集中含有Null值时是否执行映射对象的setter或者Map对象的put方法。此设置对于原始类型如int,boolean等无效。
       configuration.setCallSettersOnNulls(booleanValueOf(props.getProperty("callSettersOnNulls"), false));
       //logger名字的前缀
       configuration.setLogPrefix(props.getProperty("logPrefix"));
@@ -358,7 +359,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       configuration.setConfigurationFactory(resolveClass(props.getProperty("configurationFactory")));
     }
   }
-  
+
 	//7.环境
 //	<environments default="development">
 //	  <environment id="development">
@@ -402,7 +403,7 @@ public class XMLConfigBuilder extends BaseBuilder {
   //可以参考org.apache.ibatis.submitted.multidb包里的测试用例
 //	<databaseIdProvider type="VENDOR">
 //	  <property name="SQL Server" value="sqlserver"/>
-//	  <property name="DB2" value="db2"/>        
+//	  <property name="DB2" value="db2"/>
 //	  <property name="Oracle" value="oracle" />
 //	</databaseIdProvider>
   private void databaseIdProviderElement(XNode context) throws Exception {

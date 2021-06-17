@@ -34,14 +34,23 @@ import org.apache.ibatis.session.Configuration;
 public class ResultMap {
   private String id;
   private Class<?> type;
+  /** 全部ResultMappings集合 C.H 2021-06-17 */
   private List<ResultMapping> resultMappings;
+  /** id ResultMappings集合 C.H 2021-06-17 */
   private List<ResultMapping> idResultMappings;
+  /** constructor ResultMappings集合 C.H 2021-06-17 */
   private List<ResultMapping> constructorResultMappings;
+  /** property ResultMappings集合(包括id集合) C.H 2021-06-17 */
   private List<ResultMapping> propertyResultMappings;
+  /** 数据库字段集合 C.H 2021-06-17 */
   private Set<String> mappedColumns;
+  /** 鉴别器 C.H 2021-06-17 */
   private Discriminator discriminator;
+  /** 是否嵌套ResultMaps C.H 2021-06-17 */
   private boolean hasNestedResultMaps;
+  /** 是否嵌套Queries C.H 2021-06-17 */
   private boolean hasNestedQueries;
+  /** 是否自动映射 C.H 2021-06-17 */
   private Boolean autoMapping;
 
   private ResultMap() {
@@ -158,7 +167,7 @@ public class ResultMap {
   public void forceNestedResultMaps() {
     hasNestedResultMaps = true;
   }
-  
+
   public Boolean getAutoMapping() {
     return autoMapping;
   }

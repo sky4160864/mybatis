@@ -93,6 +93,15 @@ public class XNode {
 //	  <result property="email" column="author_email"/>
 //	  <result property="bio" column="author_bio"/>
 //	</resultMap>
+  /**
+   * <maper>
+   *     <resultMap id="roleMap" type="com.cap.entity.Role">
+   *         ...
+   *     </resultMap>
+   * </maper>
+   * 得到id:  mapper_resultMap[roleMap]
+   * C.H 2021-06-17
+   */
   public String getValueBasedIdentifier() {
     StringBuilder builder = new StringBuilder();
     XNode current = this;

@@ -4,13 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.cap.dao.RoleDao">
+
     <resultMap id="roleMap" type="com.cap.entity.Role">
         <id column="id" property="id" javaType="long" jdbcType="BIGINT"/>
-        <result column="role_name" property="roleName" javaType="string"
-                jdbcType="VARCHAR"/>
-        <result column="note" property="note"
-                typeHandler="com.cap.handle.MyStringHandler"/>
+        <result column="role_name" property="roleName" javaType="string" jdbcType="VARCHAR"/>
+        <result column="note" property="note" typeHandler="com.cap.handle.MyStringHandler"/>
+        <collection property="users" ofType="com.cap.entity.User">
+            <result column="uid" property="id"/>
+            <result column="user_name" property="userName"/>
+            <result column="age" property="age"/>
+        </collection>
     </resultMap>
+    <!-- 没有启用auto-mapping-behavior自动映射 role_name无法映射到roleName
+    <select id="getRole" parameterType="long" resultType="com.cap.entity.Role">
+    -->
     <select id="getRole" parameterType="long" resultMap="roleMap">
         select id,
                role_name,
@@ -18,6 +25,20 @@
         from role
         where id = #{id}
     </select>
+
+    <select id="getRoleWithUsers" parameterType="long" resultMap="roleMap">
+        select a.id,
+               a.role_name,
+               a.note,
+               u.id uid,
+               u.user_name,
+               u.age
+        from role a
+        inner join role_user ru on a.id = ru.role_id
+        inner join user u on ru.user_id =u.id
+        where a.id = #{id}
+    </select>
+
     <select id="findRole" parameterType="long" resultMap="roleMap">
         select id,
                role_name,

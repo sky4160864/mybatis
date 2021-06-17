@@ -36,6 +36,7 @@ public class PerpetualCache implements Cache {
   private String id;
 
   //内部就是一个HashMap,所有方法基本就是直接调用HashMap的方法,不支持多线程？
+  /* PerpetualCache作为基础功能,其他类会包装它,锁也在包装类中,所以此处不需要考虑线程安全问题 C.H 2021-06-15 */
   private Map<Object, Object> cache = new HashMap<Object, Object>();
 
   public PerpetualCache(String id) {

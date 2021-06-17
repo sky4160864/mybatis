@@ -34,7 +34,9 @@ public class LruCache implements Cache {
 
   private final Cache delegate;
   //额外用了一个map才做lru，但是委托的Cache里面其实也是一个map，这样等于用2倍的内存实现lru功能
+  /* 用LinkedHashMap重写removeEldestEntry现实了Lru功能,存在只是key C.H 2021-06-15 */
   private Map<Object, Object> keyMap;
+  /* 用于删除delegate中的值 C.H 2021-06-15 */
   private Object eldestKey;
 
   public LruCache(Cache delegate) {

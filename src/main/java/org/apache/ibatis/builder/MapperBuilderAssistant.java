@@ -194,6 +194,12 @@ public class MapperBuilderAssistant extends BaseBuilder {
       Discriminator discriminator,
       List<ResultMapping> resultMappings,
       Boolean autoMapping) {
+
+    // 为id加上namespace前缀，如selectPerson-->org.a.b.selectPerson
+    /* mapper_resultMap[roleMap]_collection[users] 加上currentNamespace变成
+       com.cap.dao.RoleDao.mapper_resultMap[roleMap]_collection[users]
+     * C.H 2021-06-17
+     * */
     id = applyCurrentNamespace(id, false);
     extend = applyCurrentNamespace(extend, true);
 
@@ -203,12 +209,15 @@ public class MapperBuilderAssistant extends BaseBuilder {
       if (!configuration.hasResultMap(extend)) {
         throw new IncompleteElementException("Could not find a parent resultmap with id '" + extend + "'");
       }
+      // 获取父ResultMap对象 C.H 2021-06-17
       ResultMap resultMap = configuration.getResultMap(extend);
       List<ResultMapping> extendedResultMappings = new ArrayList<ResultMapping>(resultMap.getResultMappings());
+      // 删除需要覆盖的resultMappings集合 C.H 2021-06-17
       extendedResultMappings.removeAll(resultMappings);
       // Remove parent constructor if this resultMap declares a constructor.
       boolean declaresConstructor = false;
       for (ResultMapping resultMapping : resultMappings) {
+        // 当前ResultMap是否有CONSTRUCTOR C.H 2021-06-17
         if (resultMapping.getFlags().contains(ResultFlag.CONSTRUCTOR)) {
           declaresConstructor = true;
           break;
@@ -217,6 +226,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
       if (declaresConstructor) {
         Iterator<ResultMapping> extendedResultMappingsIter = extendedResultMappings.iterator();
         while (extendedResultMappingsIter.hasNext()) {
+          /* 如果当前ResultMap有CONSTRUCTOR,则删除父CONSTRUCTOR,即只用自己的 C.H 2021-06-17 */
           if (extendedResultMappingsIter.next().getFlags().contains(ResultFlag.CONSTRUCTOR)) {
             extendedResultMappingsIter.remove();
           }
@@ -224,6 +234,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
       }
       resultMappings.addAll(extendedResultMappings);
     }
+    // 鉴别器
     resultMapBuilder.discriminator(discriminator);
     ResultMap resultMap = resultMapBuilder.build();
     configuration.addResultMap(resultMap);
@@ -284,11 +295,11 @@ public class MapperBuilderAssistant extends BaseBuilder {
       String databaseId,
       LanguageDriver lang,
       String resultSets) {
-    
+
     if (unresolvedCacheRef) {
       throw new IncompleteElementException("Cache-ref not yet resolved");
     }
-    
+
     //为id加上namespace前缀
     id = applyCurrentNamespace(id, false);
     //是否是select语句
@@ -421,8 +432,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
       Class<? extends TypeHandler<?>> typeHandler,
       List<ResultFlag> flags,
       String resultSet,
-      String foreignColumn, 
+      String foreignColumn,
       boolean lazy) {
+
     Class<?> javaTypeClass = resolveResultJavaType(resultType, property, javaType);
     TypeHandler<?> typeHandlerInstance = resolveTypeHandler(javaTypeClass, typeHandler);
     //解析复合的列名,一般用不到，返回的是空
@@ -524,9 +536,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
       Class<? extends TypeHandler<?>> typeHandler,
       List<ResultFlag> flags) {
       return buildResultMapping(
-        resultType, property, column, javaType, jdbcType, nestedSelect, 
+        resultType, property, column, javaType, jdbcType, nestedSelect,
         nestedResultMap, notNullColumn, columnPrefix, typeHandler, flags, null, null, configuration.isLazyLoadingEnabled());
-  }  
+  }
 
   //取得语言驱动
   public LanguageDriver getLanguageDriver(Class<?> langClass) {
@@ -564,9 +576,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
     String databaseId,
     LanguageDriver lang) {
     return addMappedStatement(
-      id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, 
-      parameterMap, parameterType, resultMap, resultType, resultSetType, 
-      flushCache, useCache, resultOrdered, keyGenerator, keyProperty, 
+      id, sqlSource, statementType, sqlCommandType, fetchSize, timeout,
+      parameterMap, parameterType, resultMap, resultType, resultSetType,
+      flushCache, useCache, resultOrdered, keyGenerator, keyProperty,
       keyColumn, databaseId, lang, null);
   }
 
