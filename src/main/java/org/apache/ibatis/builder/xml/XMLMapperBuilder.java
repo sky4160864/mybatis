@@ -433,6 +433,11 @@ public class XMLMapperBuilder extends BaseBuilder {
     }
   }
 
+  /* databaseId	如果配置了数据库厂商标识（databaseIdProvider），
+        MyBatis 会加载所有不带 databaseId 或匹配当前 databaseId 的语句；
+        如果带和不带的语句都有，则不带的会被忽略。
+        官网 ==> XML 映射器
+        C.H 2021-06-18 */
   private boolean databaseIdMatchesCurrent(String id, String databaseId, String requiredDatabaseId) {
     if (requiredDatabaseId != null) {
       if (!requiredDatabaseId.equals(databaseId)) {

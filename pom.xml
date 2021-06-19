@@ -21,7 +21,8 @@
   <parent>
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis-parent</artifactId>
-    <version>34-SNAPSHOT</version>
+    <!--版本hac:32 home:34-->
+    <version>32-SNAPSHOT</version>
   </parent>
 
   <artifactId>mybatis</artifactId>

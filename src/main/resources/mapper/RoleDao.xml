@@ -39,6 +39,23 @@
         where a.id = #{id}
     </select>
 
+    <!--测试sql语句-->
+    <sql id="include01">
+        from role a
+    </sql>
+    <select id="getRoleWithUsers2" parameterType="long" resultMap="roleMap">
+        select a.id,
+               a.role_name,
+               a.note,
+               u.id uid,
+               u.user_name,
+               u.age
+        <include refid="include01"/>
+        inner join role_user ru on a.id = ru.role_id
+        inner join user u on ru.user_id =u.id
+        where a.id = #{id}
+    </select>
+
     <select id="findRole" parameterType="long" resultMap="roleMap">
         select id,
                role_name,

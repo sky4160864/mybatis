@@ -8,6 +8,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.junit.Test;
 
 /**
  * @author C.H
@@ -18,6 +19,12 @@ public class CollectionTest {
 
     public static void main(String[] args) {
         Role role = MyUtil.callMapper(RoleDao.class, mapper -> mapper.getRoleWithUsers(1L));
+        System.out.println(role);
+    }
+
+    @Test
+    public void testInclude(){
+        Role role = MyUtil.callMapper(RoleDao.class, mapper -> mapper.getRoleWithUsers2(1L));
         System.out.println(role);
     }
 }

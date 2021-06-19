@@ -52,7 +52,9 @@ public class XMLScriptBuilder extends BaseBuilder {
   }
 
   public SqlSource parseScriptNode() {
+    /* 动态sql解析 C.H 2021-06-18 */
     List<SqlNode> contents = parseDynamicTags(context);
+    /* 组合模式 C.H 2021-06-18 */
     MixedSqlNode rootSqlNode = new MixedSqlNode(contents);
     SqlSource sqlSource = null;
     if (isDynamic) {
@@ -79,6 +81,7 @@ public class XMLScriptBuilder extends BaseBuilder {
         }
       } else if (child.getNode().getNodeType() == Node.ELEMENT_NODE) { // issue #628
         String nodeName = child.getNode().getNodeName();
+        // 处理其他标签,如trim,where...
         NodeHandler handler = nodeHandlers(nodeName);
         if (handler == null) {
           throw new BuilderException("Unknown element <" + nodeName + "> in SQL statement.");

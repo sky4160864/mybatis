@@ -48,9 +48,10 @@ public class XMLIncludeTransformer {
   public void applyIncludes(Node source) {
     if (source.getNodeName().equals("include")) {
       //走到这里，单独解析<include refid="userColumns"/>
-      //拿到SQL片段
+      //拿到SQL片段 深度克隆
       Node toInclude = findSqlFragment(getStringAttribute(source, "refid"));
       //递归调用自己,应用上?
+      /* 解析拿到的sql片段 C.H 2021-06-18 */
       applyIncludes(toInclude);
       //总之下面就是将字符串拼接进来，看不懂。。。
       if (toInclude.getOwnerDocument() != source.getOwnerDocument()) {
