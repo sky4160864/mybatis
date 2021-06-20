@@ -27,7 +27,6 @@ import org.apache.ibatis.type.SimpleTypeRegistry;
  */
 /**
  * 文本SQL节点（CDATA|TEXT）
- *
  */
 public class TextSqlNode implements SqlNode {
   private String text;
@@ -36,12 +35,12 @@ public class TextSqlNode implements SqlNode {
   public TextSqlNode(String text) {
     this(text, null);
   }
-  
+
   public TextSqlNode(String text, Pattern injectionFilter) {
     this.text = text;
     this.injectionFilter = injectionFilter;
   }
-  
+
   //判断是否是动态sql
   public boolean isDynamic() {
     DynamicCheckerTokenParser checker = new DynamicCheckerTokenParser();
@@ -52,11 +51,12 @@ public class TextSqlNode implements SqlNode {
 
   @Override
   public boolean apply(DynamicContext context) {
+    // 包含“${}”
     GenericTokenParser parser = createParser(new BindingTokenParser(context, injectionFilter));
     context.appendSql(parser.parse(text));
     return true;
   }
-  
+
   private GenericTokenParser createParser(TokenHandler handler) {
     return new GenericTokenParser("${", "}", handler);
   }
@@ -94,7 +94,7 @@ public class TextSqlNode implements SqlNode {
       }
     }
   }
-  
+
   //动态SQL检查器
   private static class DynamicCheckerTokenParser implements TokenHandler {
 
@@ -115,5 +115,5 @@ public class TextSqlNode implements SqlNode {
       return null;
     }
   }
-  
+
 }

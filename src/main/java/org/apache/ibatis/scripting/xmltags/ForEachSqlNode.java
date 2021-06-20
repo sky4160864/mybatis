@@ -75,9 +75,9 @@ public class ForEachSqlNode implements SqlNode {
           context = new PrefixedContext(context, "");
       }
       int uniqueNumber = context.getUniqueNumber();
-      // Issue #709 
+      // Issue #709
       if (o instanceof Map.Entry) {
-        @SuppressWarnings("unchecked") 
+        @SuppressWarnings("unchecked")
         Map.Entry<Object, Object> mapEntry = (Map.Entry<Object, Object>) o;
         applyIndex(context, mapEntry.getKey(), uniqueNumber);
         applyItem(context, mapEntry.getValue(), uniqueNumber);
@@ -125,6 +125,7 @@ public class ForEachSqlNode implements SqlNode {
     }
   }
 
+  // 添加前缀后缀  “#{item}”占位符转换成“#{__frch_item_1}”
   private static String itemizeItem(String item, int i) {
     return new StringBuilder(ITEM_PREFIX).append(item).append("_").append(i).toString();
   }
@@ -164,8 +165,10 @@ public class ForEachSqlNode implements SqlNode {
       GenericTokenParser parser = new GenericTokenParser("#{", "}", new TokenHandler() {
         @Override
         public String handleToken(String content) {
+          // __frch_item_index C.H “#{item}”占位符转换成“#{__frch_item_1}”
           String newContent = content.replaceFirst("^\\s*" + item + "(?![^.,:\\s])", itemizeItem(item, index));
           if (itemIndex != null && newContent.equals(content)) {
+            // 再来一次,啥意思?
             newContent = content.replaceFirst("^\\s*" + itemIndex + "(?![^.,:\\s])", itemizeItem(itemIndex, index));
           }
           return new StringBuilder("#{").append(newContent).append("}").toString();

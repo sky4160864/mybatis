@@ -71,8 +71,10 @@ public class TrimSqlNode implements SqlNode {
 
   private class FilteredDynamicContext extends DynamicContext {
     private DynamicContext delegate;
+    /* 是否处理过前缀后缀,默认false C.H 2021-06-19 */
     private boolean prefixApplied;
     private boolean suffixApplied;
+    /* TODO 值怎么来的? C.H 2021-06-19 */
     private StringBuilder sqlBuffer;
 
     public FilteredDynamicContext(DynamicContext delegate) {
